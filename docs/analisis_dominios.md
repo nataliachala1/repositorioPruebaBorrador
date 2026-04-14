@@ -128,7 +128,7 @@ Este dominio gestiona la información de clientes y programas de fidelización. 
 
 `customer_category` → `benefit_type` → `lovalty_program` → `lovalty_tier` → `customer` → `lovalty_account` -> `loyalty_account_tier` → `miles_transaction` → `customer_benefit`
 
-**Dominio 6: Aeropuerto**
+# Dominio 6: Aeropuerto
 
 **Tablas:**
 
@@ -152,9 +152,9 @@ Este dominio gestiona la infraestructura aeroportuaria, incluyendo aeropuertos, 
 **Orden de carga:**
 airport → terminal → boarding_gate → runway → airport_regulation
 
-Dominio 7: Aeronaves
+# Dominio 7: Aeronaves
 
-Tablas:
+**Tablas:**
 
 aircraft_manufacturer
 aircraft_model
