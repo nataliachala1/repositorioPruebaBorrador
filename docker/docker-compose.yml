@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: prueba
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - airline_network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: airline-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - airline_network
+
+  liquibase:
+    image: liquibase/liquibase
+    container_name: liquibase_runner
+    restart: no
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ../liquibase:/liquibase/changelog
+    command: >
+      --url=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      --username=${POSTGRES_USER}
+      --password=${POSTGRES_PASSWORD}
+      --changeLogFile=changelog/changelog-master.xml
+      update
+    networks:
+      - airline_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  airline_network:
+    driver: bridge

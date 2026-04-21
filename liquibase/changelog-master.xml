@@ -1,0 +1,21 @@
+ databaseChangeLog:
+  # Orden lógico de ejecución
+  - includeAll:
+      path: changelog/01_ddl/
+      relativeToChangelogFile: true
+      errorIfMissingOrEmpty: false
+
+  - includeAll:
+      path: changelog/02_dml/
+      relativeToChangelogFile: true
+      errorIfMissingOrEmpty: false
+
+  - includeAll:
+      path: changelog/03_dcl/
+      relativeToChangelogFile: true
+      errorIfMissingOrEmpty: false
+
+  - includeAll:
+      path: changelog/04_tcl/
+      relativeToChangelogFile: true
+      errorIfMissingOrEmpty: false 
